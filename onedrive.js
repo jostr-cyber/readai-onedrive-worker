@@ -9,7 +9,7 @@ params.append("client_secret", process.env.MS_CLIENT_SECRET);
 params.append("refresh_token", process.env.MS_REFRESH_TOKEN);
 params.append("redirect_uri", "https://oauth.pstmn.io/v1/browser-callback");
 params.append("grant_type", "refresh_token");
-params.append("scope", "https://graph.microsoft.com/Files.ReadWrite offline_access");
+params.append("scope", "offline_access Files.ReadWrite User.Read");
 
 const { data } = await axios.post(url, params, {
 headers: { "Content-Type": "application/x-www-form-urlencoded" }
