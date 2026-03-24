@@ -7,7 +7,7 @@ const params = new URLSearchParams();
 params.append("client_id", process.env.MS_CLIENT_ID);
 params.append("client_secret", process.env.MS_CLIENT_SECRET);
 params.append("refresh_token", process.env.MS_REFRESH_TOKEN);
-params.append("redirect_uri", "https://login.microsoftonline.com/common/oauth2/nativeclient");
+params.append("redirect_uri", "https://oauth.pstmn.io/v1/browser-callback");
 params.append("grant_type", "refresh_token");
 params.append("scope", "https://graph.microsoft.com/Files.ReadWrite offline_access");
 
@@ -20,6 +20,20 @@ return data.access_token;
 
 export async function uploadToOneDrive(fileName, content) {
 const token = await getAccessToken();
+
+const me = await axios.get("https://graph.microsoft.com/v1.0/me", {
+headers: {
+Authorization: `Bearer ${token}`
+}
+});
+console.log("ME:", JSON.stringify(me.data));
+
+const drive = await axios.get("https://graph.microsoft.com/v1.0/me/drive", {
+headers: {
+Authorization: `Bearer ${token}`
+}
+});
+console.log("DRIVE:", JSON.stringify(drive.data));
 
 const basePath = process.env.ONEDRIVE_FOLDER_PATH;
 const encodedPath = encodeURIComponent(`${basePath}/${fileName}`).replace(/%2F/g, "/");
